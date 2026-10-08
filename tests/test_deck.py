@@ -84,3 +84,19 @@ def test_no_horizontal_scroll(browser, w, h):
     SHOTS.mkdir(parents=True, exist_ok=True)
     page.screenshot(path=str(SHOTS / f"deck-{w}.png"), full_page=True)
     page.context.close()
+
+
+def test_space_after_a_click_stops_playback(page):
+    page.click(".pad[data-mood=gentle]")
+    playing(page)
+    page.keyboard.press(" ")
+    page.wait_for_timeout(300)
+    assert page.evaluate("PB.player.state.playing") is False
+
+
+def test_phone_side_gutter_is_16px(browser):
+    page = open_page(browser, viewport={"width": 390, "height": 844})
+    box = page.evaluate("(()=>{const r=document.querySelector('.unit').getBoundingClientRect();"
+                        "return [r.left, innerWidth-r.right]})()")
+    assert box[0] >= 16 and box[1] >= 16, box
+    page.context.close()

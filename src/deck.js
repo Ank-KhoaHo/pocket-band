@@ -29,7 +29,7 @@ function sync(){var S=STY[st.si],C=MOODS[st.mi],now=P.now();
  $$('[data-mode]').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.mode===st.mode)});
  $$('[data-layer]').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.layer===st.layer)});
  $$('[data-mix]').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.mix===st.mixtape)});
- var play=$('#play');play.setAttribute('aria-pressed',st.playing||st.busy);play.textContent=st.busy?'… Building':(st.playing?'■ Stop':'▶ Play');
+ var play=$('#play'),on=st.playing||st.busy||!!st.mixtape;play.setAttribute('aria-pressed',on);play.textContent=st.busy?'… Building':(on?'■ Stop':'▶ Play');
  $('#viewRoll').setAttribute('aria-pressed',st.view==='roll');$('#viewScope').setAttribute('aria-pressed',st.view==='scope');
  $('#fav').setAttribute('aria-pressed',P.isFav(st.si,st.mi));$('#rm').setAttribute('aria-pressed',st.reduceMotion);document.body.classList.toggle('rm',st.reduceMotion);
  $('#nowTitle').textContent=st.mixtape?upper('Mixtape / '+P.MIXTAPES.filter(function(t){return t.id===st.mixtape})[0].nm):upper(S.label+' / '+C.nm);
@@ -83,11 +83,21 @@ document.addEventListener('click',function(e){var b=e.target.closest('button');i
   case 'resetPlays':if(confirm('Reset my plays? This clears the listening log; favourites stay.'))P.resetPlays();break}});
 
 /* ---------- keys ---------- */
+/* a mouse-focused button still gets a keyboard click (detail 0) after Space's key-up; when Space was
+   taken as play/stop, swallow that one click so it does not restart the loop */
+var spaceTaken=false;
+var pointerFocused=null;
+document.addEventListener('pointerdown',function(e){pointerFocused=e.target.closest?e.target.closest('button,[role=slider]'):null},true);
+document.addEventListener('keydown',function(e){if(e.key==='Tab')pointerFocused=null},true);
+document.addEventListener('click',function(e){if(spaceTaken&&e.detail===0){spaceTaken=false;e.preventDefault();e.stopImmediatePropagation()}},true);
+document.addEventListener('keyup',function(e){if(e.key===' '&&spaceTaken)setTimeout(function(){spaceTaken=false},0)});
 document.addEventListener('keydown',function(e){if(e.ctrlKey||e.metaKey||e.altKey)return;var t=e.target;
  if(t.closest&&t.closest('input,textarea,select'))return;var k=e.key;
  if(/^[0-9]$/.test(k)){var i=(+k+9)%10;if(i<STY.length){P.select(i,st.mi);e.preventDefault()}return}
  if(k==='ArrowRight'||k==='ArrowLeft'){P.step(k==='ArrowRight'?1:-1);e.preventDefault();return}
- if(k===' '){if(t.closest&&t.closest('button,[role=slider]'))return;P.toggle();e.preventDefault();return}
+ /* Space is play/stop, except on a control reached by keyboard: a mouse click also focuses a button,
+    and Chrome marks it focus-visible as soon as a key is pressed, so track how it got focus ourselves */
+ if(k===' '){var c=t.closest&&t.closest('button,[role=slider]');if(c&&c!==pointerFocused)return;P.toggle();e.preventDefault();spaceTaken=true;return}
  var lk=k.toLowerCase(),L=['full','calm','build','tense'],M=['one','next','all','shuffle'];
  if(lk==='n')P.step(1);else if(lk==='m')P.setMode(M[(M.indexOf(st.mode)+1)%4]);else if(lk==='l')P.setLayer(L[(L.indexOf(st.layer)+1)%4]);
  else if(lk==='v')P.setView(st.view==='roll'?'scope':'roll');else if(lk==='f')P.toggleFav();else if(lk==='d')download();

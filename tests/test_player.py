@@ -103,3 +103,30 @@ def test_mixtape_plays_and_stops(page):
     page.evaluate("PB.player.stopMixtape()")
     assert page.evaluate("PB.player.mixtapeNow()") is None
     assert page.evaluate("PB.player.state.mixtape") is None
+
+
+def test_toggle_during_a_mixtape_stops_it(page):
+    page.evaluate("PB.player.playMixtape('rise')")
+    page.wait_for_function("PB.player.mixtapeNow()!==null", timeout=120000)
+    page.evaluate("PB.player.toggle()")
+    page.wait_for_timeout(800)
+    assert page.evaluate("PB.player.state.mixtape") is None
+    assert page.evaluate("PB.player.state.playing") is False
+    assert page.evaluate("PB.player._activeSources()") == 0
+
+
+def test_two_quick_layer_changes_end_on_the_last(page):
+    page.evaluate("PB.player.select(0,PB.moodIndex.lively)")
+    page.wait_for_function("PB.player.state.playing && !PB.player.state.busy", timeout=60000)
+    page.evaluate("PB.player.setLayer('calm');PB.player.setLayer('tense')")
+    page.wait_for_function("!!PB.player.now().loop.hb", timeout=60000)
+    page.wait_for_timeout(1500)
+    assert page.evaluate("PB.player._heard()") == "tense"
+
+
+def test_layer_set_while_building_is_the_one_heard(page):
+    page.evaluate("PB.player.select(0,PB.moodIndex.theme);PB.player.setLayer('tense')")
+    page.wait_for_function("PB.player.state.playing && !PB.player.state.busy", timeout=60000)
+    page.wait_for_timeout(1500)
+    assert page.evaluate("!!PB.player.now().loop.hb")
+    assert page.evaluate("PB.player._heard()") == "tense"

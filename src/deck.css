@@ -116,7 +116,7 @@ kbd{font:600 11px var(--text);border:1px solid currentColor;border-radius:3px;pa
 /* ---------- narrow screens ---------- */
 @media (max-width:900px){.tapes{grid-template-columns:repeat(5,minmax(0,1fr))}.pads{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media (max-width:760px){
-  body{padding:10px 8px 20px}
+  body{padding:10px 16px 20px}
   .unit{padding:12px;border-radius:16px}
   .deck{grid-template-columns:minmax(0,1fr)}
   .tapes{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 8px}

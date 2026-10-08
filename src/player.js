@@ -43,9 +43,9 @@ function fadeOut(nodes,when,fade){nodes.forEach(function(n){try{n.g.gain.cancelS
 var cur=null,tok=null,pending=false,advancing=false;
 function layerGains(layer){return {base:1,hi:layer==='build'||layer==='tense'?1:0,hb:layer==='tense'?1.1:0,cut:layer==='tense'?600:20000}}
 function applyLayer(layer,when){if(!cur||cur.kind!=='stems')return;var g=layerGains(layer);
- cur.nodes.forEach(function(n){n.g.gain.cancelScheduledValues(when);n.g.gain.setTargetAtTime(g[n.k],when,.12)});cur.filter.frequency.setTargetAtTime(g.cut,when,.18)}
+ cur.layer=layer;cur.nodes.forEach(function(n){n.g.gain.cancelScheduledValues(when);n.g.gain.setTargetAtTime(g[n.k],when,.12)});cur.filter.frequency.setTargetAtTime(g.cut,when,.18)}
 function nextBeat(){if(!cur)return AC.currentTime+.03;var b=cur.loop.spb;return cur.start+Math.ceil((AC.currentTime-cur.start)/b+.05)*b}
-function start(at){audio();var si=st.si,mi=st.mi,layer=st.layer,t={};tok=t;pending=true;st.next=null;
+function start(at){audio();stopMixtape(true);var si=st.si,mi=st.mi,layer=st.layer,t={};tok=t;pending=true;st.next=null;
  if(!st.playing){st.busy=true;emit('status','Building '+STY[si].nm+' · '+MOODS[mi].nm+' …')}emit('change');
  var job=layer==='full'?PB.getLoop(si,mi):PB.getStems(si,mi);
  return job.then(function(r){if(tok!==t)return;var t0=Math.max(AC.currentTime+.03,at||0),nodes=[],filter=null,kind=layer==='full'?'loop':'stems';
@@ -118,13 +118,14 @@ function download(){var si=st.si,mi=st.mi,layer=st.layer,S=STY[si],C=MOODS[mi];
 function setMode(m){if(MODES.indexOf(m)<0)return;st.mode=m;store('mode',m);if(st.playing)planNext();else st.next=null;emit('change')}
 function setReps(n){if([1,2,4].indexOf(n)<0)return;st.reps=n;store('reps',n);emit('change')}
 function setLayer(l){if(LAYERS.indexOf(l)<0||l===st.layer)return;var was=st.layer;st.layer=l;store('layer',l);
- if(st.playing&&cur&&!st.mixtape){if(was!=='full'&&l!=='full')applyLayer(l,nextBeat());else start(nextBeat())}emit('change')}
+ /* a render still pending was started for the old layer: start again (its token drops the stale one) */
+ if(st.mixtape){}else if(pending)start(cur?nextBeat():0);else if(st.playing&&cur){if(was!=='full'&&l!=='full')applyLayer(l,nextBeat());else start(nextBeat())}emit('change')}
 function setView(v){if(VIEWS.indexOf(v)<0)return;st.view=v;store('view',v);emit('change')}
 function setVolume(v){st.volume=Math.max(0,Math.min(1,+v||0));store('vol',st.volume);if(MAIN)MAIN.gain.setTargetAtTime(st.volume,AC.currentTime,.02);emit('change')}
 function setReduceMotion(b){st.reduceMotion=!!b;store('rm',b?'1':'0');emit('change')}
 
 var api={state:st,analyser:null,MIXTAPES:MIXTAPES,on:on,select:select,play:function(){return start()},stop:stop,
- toggle:function(){if(st.playing||st.busy)stop();else start()},step:function(dir){var n=nextPick(dir);return select(n.si,n.mi)},
+ toggle:function(){if(st.playing||st.busy||st.mixtape)stop();else start()},step:function(dir){var n=nextPick(dir);return select(n.si,n.mi)},
  setMode:setMode,setReps:setReps,setLayer:setLayer,setView:setView,setVolume:setVolume,setReduceMotion:setReduceMotion,
  toggleFav:toggleFav,isFav:isFav,plays:listPlays,playsText:playsText,resetPlays:resetPlays,download:download,
  playMixtape:playMixtape,stopMixtape:function(){stopMixtape()},
@@ -134,6 +135,7 @@ var api={state:st,analyser:null,MIXTAPES:MIXTAPES,on:on,select:select,play:funct
  audioTime:function(){return AC?AC.currentTime:0},
  /* test hooks */
  _skipToEnd:function(sec){if(cur)cur.start=AC.currentTime-(cur.loop.loopSec*st.reps-sec)},
- _activeSources:function(){return live.size}};
+ _activeSources:function(){return live.size},
+ _heard:function(){return cur?(cur.kind==='loop'?'full':cur.layer):null}};
 PB.player=api;
 })();
