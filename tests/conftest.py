@@ -68,6 +68,30 @@ def render_stats(page, style_id, mood_ids):
     return page.evaluate(RENDER_JS, [style_id, list(mood_ids)])
 
 
+PLAY_ONE_JS = """async ([name, midi, dur, secs]) => {
+  const SR = PB.SR, ctx = new OfflineAudioContext(2, Math.ceil(secs * SR), SR);
+  const S = {swing: {def: .5}, grid: 8, ir: {sec: .5, damp: .5, pre: .01}, revRet: 0, parts: {}};
+  const C = PB.MOODS[PB.moodIndex.gentle], X = PB.makeX(ctx, S, C, 480, 'all', 7), I = PB.inst;
+  const out = X.out('t'), n = {m: midi, t: .05, d: dur, v: .8, out: out};
+  const [kind, arg] = name.includes(':') ? name.split(':') : [null, name];
+  if (kind === 'W') I.W(arg)(X, n, {});
+  else if (kind === 'M') I.M(arg)(X, n, {});
+  else if (kind === 'D') I.drum(X, arg, .05, .9, out, {});
+  else if (kind === 'T') { if (arg === 'drone') I.drone(X, 't', midi); else I[arg](X, 't') }
+  else I[arg](X, n, {});
+  const buf = await ctx.startRendering(), d = buf.getChannelData(0);
+  let pk = 0, tail = 0, finite = true;
+  const t0 = d.length - Math.round(.2 * SR);
+  for (let i = 0; i < d.length; i++) { const a = Math.abs(d[i]); if (!isFinite(a)) finite = false;
+    if (a > pk) pk = a; if (i >= t0 && a > tail) tail = a }
+  return {finite: finite, peakDb: 20 * Math.log10(pk + 1e-12), tailDb: 20 * Math.log10(tail + 1e-12)} }"""
+
+
+def play_one(page, name, midi=60, dur=1.0, secs=4.0):
+    """Render one note (or one drum hit, or a texture) of an instrument, alone, and measure it."""
+    return page.evaluate(PLAY_ONE_JS, [name, midi, dur, secs])
+
+
 def js(page, expr):
     return page.evaluate(expr)
 
