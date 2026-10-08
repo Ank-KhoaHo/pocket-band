@@ -5,7 +5,7 @@ import pytest
 from conftest import render_stats
 from test_engine import ORDER, ok
 
-NEW_STYLES = ["ambient", "jazz", "synthwave", "tavern"]
+NEW_STYLES = ["ambient", "jazz", "synthwave", "tavern", "bossa"]
 ARRS = {"gentle", "quiet", "theme", "lively", "stroll", "warm", "tense", "epic"}
 
 
