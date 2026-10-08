@@ -8,14 +8,31 @@ just the mechanics of building and testing it.
 
 ## Building and testing
 
-There is no build step. The whole player is [`src/index.html`](src/index.html): edit it, then
-open it in a browser and listen. A change to the music is only checked by hearing it.
+There is no build step. The player is plain HTML, CSS and JavaScript under [`src/`](src/):
+open `src/index.html` in a browser and listen. A change to the music is only truly checked by
+hearing it.
 
-The repository's own checks are a docs guard:
+The automated checks run the player in headless Chrome through Playwright:
 
 ```bash
-python -m pytest
+python -m venv .venv
+.venv/Scripts/python -m pip install -r requirements-dev.txt   # .venv/bin/python on Linux/macOS
+.venv/Scripts/python -m playwright install chromium            # not needed if Chrome is installed
+.venv/Scripts/python -m pytest
 ```
+
+The full run renders all 180 loops and takes about 30 minutes. While working on one style, run
+`-k <style id>`. A skipped test counts as a failure.
+
+## Where the code lives
+
+| File | Holds |
+|---|---|
+| `src/engine.js` | the tune, moods, rendering, loudness, WAV export |
+| `src/instruments.js` | every instrument, drum and texture |
+| `src/styles/*.js` | one file per cassette; add a style by adding a file and a `<script>` line |
+| `src/player.js` | playback, play modes, layers, mixtapes, favourites, saved settings |
+| `src/deck.js`, `src/deck.css` | the tape-deck screen |
 
 ## Branching and pull requests
 

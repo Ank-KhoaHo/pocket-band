@@ -1,4 +1,5 @@
-"""Every new style plays every mood: not silent, no NaN, loudness-matched, and fast moods above 200 BPM."""
+"""Every style plays every mood (all 180 loops): not silent, no NaN, loudness-matched,
+and fast moods above 200 BPM. Slow on purpose -- about 30 minutes for all ten styles."""
 
 import pytest
 
@@ -6,10 +7,11 @@ from conftest import render_stats
 from test_engine import ORDER, ok
 
 NEW_STYLES = ["ambient", "jazz", "synthwave", "tavern", "bossa", "zen"]
+ALL_STYLES = ["folk", "lofi", "orch", "chip"] + NEW_STYLES
 ARRS = {"gentle", "quiet", "theme", "lively", "stroll", "warm", "tense", "epic"}
 
 
-@pytest.mark.parametrize("sid", NEW_STYLES)
+@pytest.mark.parametrize("sid", ALL_STYLES)
 def test_style_plays_every_mood(page, sid):
     stats = render_stats(page, sid, ORDER)
     for s in stats:

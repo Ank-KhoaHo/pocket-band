@@ -62,17 +62,32 @@ jobs:
             exit 1
           fi
 
-  # ---------------------------------------------------------------------
-  # YOUR PROJECT'S TESTS GO HERE.
-  #
-  # The template is language-agnostic, so it cannot know your test command.
-  # Add a job here, then close ticket D3, which tracks exactly this.
-  #
-  #  project:
-  #    name: test
-  #    runs-on: ubuntu-latest
-  #    steps:
-  #      - uses: actions/checkout@v4
-  #      - run: <your build>
-  #      - run: <your tests>
-  # ---------------------------------------------------------------------
+  # The player only exists inside a browser, so its tests drive headless
+  # Chromium through Playwright. Rendering all 180 loops takes about 30
+  # minutes; the same skip check applies.
+  player:
+    name: player tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-dev.txt
+          python -m playwright install --with-deps chromium
+
+      - name: Player tests
+        shell: bash
+        run: |
+          set -eo pipefail
+          python -m pytest -v -rs -p no:cacheprovider tests --ignore=tests/test_docs_integrity.py | tee pytest.out
+          if grep -qE '[0-9]+ skipped' pytest.out; then
+            echo "::error::Tests were skipped — the suite may be vacuous."
+            exit 1
+          fi

@@ -4,23 +4,29 @@ A music player whose every tune is composed in code, in the browser, with the We
 
 ## What this is
 
-A music player in one web page. Every note is composed and synthesised in the browser by the
-Web Audio API: no audio files, no samples, nothing to install. Plucked strings, FM electric
-piano, mallets, winds and drums are all made in code, then mixed with a generated reverb.
+A music player that looks like a tape deck. Every note is composed and synthesised in the
+browser by the Web Audio API: no audio files, no samples, nothing to install. Plucked strings,
+pianos, mallets, winds, synths and drums are all made in code, then mixed with a generated
+reverb. Use it as background music, or to pick loops for a game.
 
 ## Play it
 
-Open [`src/index.html`](src/index.html) in a browser and press **Play**. The only thing it
-fetches is the Open Sans font.
+Open [`src/index.html`](src/index.html) in a browser, pick a cassette and a mood, and press
+**Play**. The only thing it fetches is its fonts.
 
-- **4 styles:** cozy acoustic folk, lo-fi hop, whimsical orchestral, chiptune-folk.
-- **12 moods** in 4 groups (Calm, Bright, Moody, Bold). Each is the same 16-bar tune in its own
-  key, mode, tempo and band.
-- **Play modes:** Repeat, Play through, Play all, Shuffle; change after 1, 2 or 4 loops.
-- **Journeys:** 5 sets of moods played back to back, each change on a bar line.
-- **Live layers:** the current mood split into parts — Calm, Build, Tense.
+- **10 cassettes (styles):** folk, lo-fi, orchestra, chiptune, ambient, jazz café, synthwave,
+  tavern, bossa and zen.
+- **18 moods** in 5 groups: Calm, Bright, Moody, Bold and Fast. Each is the same 16-bar tune in
+  its own key, mode, tempo and band. **Rush** and **Chase** run above 200 BPM.
+- **Play modes:** Repeat, Through (every mood of a cassette), All (every mood, then the next
+  cassette), Shuffle — changing after 1, 2 or 4 loops, on the loop's end.
+- **Layers:** Full, or the loop split into parts — Calm, Build, Tense — that change on the beat.
+- **⤓ WAV:** download the loop you hear as a seamless 16-bit stereo WAV, ready for a game.
+- **Mixtapes:** 5 sets of moods played back to back, each change on a bar line.
+- **♥ and My plays:** mark favourites; your most-played loops are counted in your browser only.
 
-Keys: `1`-`4` style · `←` `→` mood · `Space` play/stop · `N` next · `M` play mode · `Esc` stop.
+Keys: `1`-`0` cassette · `←` `→` mood · `Space` play/stop · `N` next · `M` play mode ·
+`L` layers · `V` roll/scope · `F` favourite · `D` download · `Esc` stop.
 
 Each loop takes a few seconds to build the first time it plays. Every loop is matched to the
 same loudness (−24 LUFS), so switching never jumps in volume.

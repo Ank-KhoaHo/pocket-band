@@ -9,7 +9,6 @@ import json
 from pathlib import Path
 
 import pytest
-from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "src" / "index.html"
@@ -18,6 +17,9 @@ ARGS = ["--autoplay-policy=no-user-gesture-required"]
 
 @pytest.fixture(scope="session")
 def browser():
+    # Imported here, not at the top: the docs-guard CI job installs only pytest and
+    # loads this file too, so a top-level import would crash it.
+    from playwright.sync_api import sync_playwright
     with sync_playwright() as p:
         try:
             b = p.chromium.launch(channel="chrome", args=ARGS)
