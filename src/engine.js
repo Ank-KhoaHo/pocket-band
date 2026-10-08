@@ -146,7 +146,12 @@ function makeX(ctx,S,C,bpm,mask,seed){
  X.ev=[];X.evn=function(cat,m,t,d){X.ev.push({c:cat,m:m,t:t,d:d})};X.evd=function(part,kind,t,v){X.ev.push({c:part==='nat'?'fx':(part==='hb'?'hb':'perc'),k:kind,t:t,v:v})};
  return X}
 /* one note: humanised, recorded for the piano roll */
-function N(X,L,part,cat,inst,o,m,t,d,v){if(!X.on(L))return;if(X.C.gate&&cat!=='bass')d*=X.C.gate;if(L==='hi')v*=1.7;t+=(X.rng()-.5)*2*X.hum;v*=1+(X.rng()-.5)*.16;t=Math.max(0,t);X.evn(cat,m,t,d);var out=X.out(part);X.later(t,t+d+4,function(){inst(X,{m:m,t:t,d:d,v:v,out:out},o||{})})}
+/* a pentatonic style (Zen) snaps every pitch to the nearest note of the key's 5-note scale, ties downward */
+var PENTA_MAJ=[0,2,4,7,9],PENTA_MIN=[0,3,5,7,10],MINOR_MODES={aeo:1,harm:1,dor:1,phr:1};
+function snapPenta(m,key,minor){var set=minor?PENTA_MIN:PENTA_MAJ,pc=((m-key)%12+12)%12,best=0,bd=99;
+ for(var i=-1;i<=set.length;i++){var s=i<0?set[set.length-1]-12:i===set.length?set[0]+12:set[i],dd=Math.abs(pc-s);if(dd<bd||(dd===bd&&s<best)){bd=dd;best=s}}
+ return m-pc+best}
+function N(X,L,part,cat,inst,o,m,t,d,v){if(!X.on(L))return;if(X.C.gate&&cat!=='bass')d*=X.C.gate;if(X.S.penta)m=snapPenta(m,X.C.key,!!MINOR_MODES[X.C.mode]);if(L==='hi')v*=1.7;t+=(X.rng()-.5)*2*X.hum;v*=1+(X.rng()-.5)*.16;t=Math.max(0,t);X.evn(cat,m,t,d);var out=X.out(part);X.later(t,t+d+4,function(){inst(X,{m:m,t:t,d:d,v:v,out:out},o||{})})}
 
 /* =====================================================================
    ARRANGING HELPERS (bars: an array of bar indices)
@@ -235,5 +240,5 @@ Object.assign(PB,{SR:SR,TARGET:TARGET,util:{rng:rng,mtof:mtof,clamp:clamp,R:R,ro
   bassl:bassl,melody:melody,harm:harm,drums:drums,fill:fill,sparkle:sparkle,hearts:hearts,
   birds:function(){return NS.birds.apply(null,arguments)},crickets:function(){return NS.crickets.apply(null,arguments)},
   crackle:function(){return NS.crackle.apply(null,arguments)},ALL:ALL,ODD2:ODD2},
- renderRaw:renderRaw,getLoop:getCue,getStems:getStems});
+ renderRaw:renderRaw,getLoop:getCue,getStems:getStems,snapPenta:snapPenta});
 })();
