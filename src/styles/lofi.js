@@ -6,7 +6,7 @@ var W=NS.W,M=NS.M,EP=NS.EP,SUB=NS.SUB,SAWB=NS.SAWB,CH=NS.CH,GTR=NS.GTR,MAND=NS.M
 /* ---- (b) lo-fi hop ---- */
 PB.addStyle({id:'lofi',label:'LO-FI',short:'e-piano · kalimba',stripe:'#8a6fb0',nm:'Lo-fi hop',
  ds:'Swung boom-bap drums; electric piano with 7ths and 9ths; kalimba and vibes; sub bass; tape wobble and vinyl.',
- bpm:{gentle:74,lively:90,warm:82,quiet:68,theme:84,stroll:92,tense:86,epic:98},
+ bpm:{gentle:74,lively:90,warm:82,quiet:68,theme:84,stroll:92,tense:86,epic:98},fast:{rush:202,chase:210},
  swing:{def:.6},grid:16,ir:{sec:2.2,damp:.85,pre:.02},revRet:.6,wobble:7,sat:1.5,master:[{t:'lowpass',f:7800,q:.5},{t:'lowshelf',f:170,g:2}],dangerCut:1150,
  parts:{ep:{pan:0,rev:.22,g:.75,lp:4200},bass:{rev:0,g:1,lp:500},kal:{pan:-.18,rev:.3,g:.85},vib:{pan:.22,rev:.32,g:.8},gtr:{pan:-.32,rev:.15,g:.5,lp:2600},kick:{g:1,rev:.02},
   snare:{pan:.05,rev:.14,g:.8},hat:{pan:.25,rev:.05,g:.65,lp:9000},shak:{pan:-.3,rev:.05,g:.6},vinyl:{g:.7,post:true},nat:{rev:.3,g:.5},lead:{pan:-.1,rev:.3,g:.85},brass:{pan:.15,rev:.25,g:.6},hb:{post:true,g:1}},

@@ -18,3 +18,39 @@ def test_existing_loops_still_render(page):
     stats = render_stats(page, "folk", ["gentle", "tense"]) + render_stats(page, "chip", ["epic"])
     for s in stats:
         assert ok(s), s
+
+
+ORDER = ["gentle", "quiet", "dreamy", "rainy", "theme", "lively", "playful", "stroll", "warm",
+         "mystery", "melancholy", "spooky", "adventure", "tense", "epic", "triumph", "rush", "chase"]
+NEW_MOODS = ["rainy", "playful", "spooky", "adventure", "triumph", "rush", "chase"]
+
+
+def test_eighteen_moods_in_order(page):
+    assert page.evaluate("PB.MOODS.map(m=>m.id)") == ORDER
+    groups = page.evaluate("PB.MOODS.map(m=>m.grp)")
+    assert groups == ["Calm"] * 4 + ["Bright"] * 5 + ["Moody"] * 3 + ["Bold"] * 4 + ["Fast"] * 2
+
+
+def test_fast_moods_above_200_in_every_style(page):
+    rows = page.evaluate("PB.STYLES.map(s=>[s.id,PB.bpmOf(s,PB.MOODS[PB.moodIndex.rush]),"
+                         "PB.bpmOf(s,PB.MOODS[PB.moodIndex.chase])])")
+    for sid, rush, chase in rows:
+        assert rush > 200 and chase > 200, sid
+
+
+def test_new_moods_render_in_existing_styles(page):
+    for sid in ["folk", "lofi", "orch", "chip"]:
+        for s in render_stats(page, sid, NEW_MOODS):
+            assert ok(s), s
+
+
+def test_rain_is_in_rainy_only(page):
+    assert page.evaluate("PB.getLoop(0,PB.moodIndex.rainy).then(r=>r.ev.some(e=>e.k==='rain'))")
+    assert not page.evaluate("PB.getLoop(0,PB.moodIndex.quiet).then(r=>r.ev.some(e=>e.k==='rain'))")
+
+
+def test_playful_notes_are_shorter_than_lively(page):
+    js = ("Promise.all([PB.getLoop(0,PB.moodIndex.lively),PB.getLoop(0,PB.moodIndex.playful)]).then(rs=>"
+          "rs.map(r=>{const n=r.ev.filter(e=>e.c==='call');return n.reduce((a,e)=>a+e.d,0)/n.length/r.spb}))")
+    lively, playful = page.evaluate(js)
+    assert playful < lively * 0.6

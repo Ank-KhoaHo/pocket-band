@@ -6,7 +6,7 @@ var W=NS.W,M=NS.M,EP=NS.EP,SUB=NS.SUB,SAWB=NS.SAWB,CH=NS.CH,GTR=NS.GTR,MAND=NS.M
 /* ---- (d) chiptune-folk hybrid ---- */
 PB.addStyle({id:'chip',label:'CHIPTUNE',short:'pulse · triangle',stripe:'#4ab0a0',nm:'Chiptune-folk hybrid',
  ds:'Pulse-wave lead with a tin whistle; fast chip arpeggios; triangle bass; 8-bit noise drums with a real kick and guitar.',
- bpm:{gentle:100,lively:132,warm:116,quiet:90,theme:120,stroll:126,tense:132,epic:152},
+ bpm:{gentle:100,lively:132,warm:116,quiet:90,theme:120,stroll:126,tense:132,epic:152},fast:{rush:216,chase:240},
  swing:{def:.5,stroll:.56,gentle:.54,quiet:.54},grid:8,ir:{sec:1.2,damp:.5,pre:.008},revRet:.4,dangerCut:1800,
  parts:{ld:{pan:.1,rev:.18,g:.75},ld2:{pan:-.2,rev:.2,g:.6,delay:[.75,.35,.45]},arp:{pan:-.25,rev:.12,g:.45},tri:{rev:.02,g:.95},nz:{pan:.2,rev:.06,g:.6},kick:{g:.9,rev:.02},gtr:{pan:.3,rev:.14,g:.5,hp:90},
   wh:{pan:-.1,rev:.24,g:.8},glk:{pan:.3,rev:.3,g:.42},nat:{rev:.25,g:.5},hb:{post:true,g:1}},

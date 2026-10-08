@@ -6,7 +6,7 @@ var W=NS.W,M=NS.M,EP=NS.EP,SUB=NS.SUB,SAWB=NS.SAWB,CH=NS.CH,GTR=NS.GTR,MAND=NS.M
 /* ---- (a) cozy acoustic folk ---- */
 PB.addStyle({id:'folk',label:'FOLK',short:'guitar · fiddle',stripe:'#c97b3a',nm:'Cozy acoustic folk',
  ds:'Fingerpicked guitar and mandolin; tin whistle and fiddle trade the tune; upright bass, cajon, shaker.',
- bpm:{gentle:84,lively:116,warm:96,quiet:70,theme:96,stroll:104,tense:112,epic:136},
+ bpm:{gentle:84,lively:116,warm:96,quiet:70,theme:96,stroll:104,tense:112,epic:136},fast:{rush:210,chase:228},
  swing:{def:.56,lively:.58,epic:.52,tense:.52},grid:8,ir:{sec:1.7,damp:.7,pre:.012},revRet:.55,master:[{t:'peaking',f:260,g:-1.5,q:.8}],dangerCut:1700,
  parts:{gtr:{pan:-.22,rev:.16,g:.55,hp:70,pk:[2600,2.5,1.2]},mand:{pan:.32,rev:.18,g:.34,hp:200},lead:{pan:.08,rev:.22,g:.95},resp:{pan:-.14,rev:.24,g:.9},harm:{pan:.26,rev:.22,g:.55},
   bass:{pan:0,rev:.05,g:.95,lp:1300},acc:{pan:.2,rev:.2,g:.6},kick:{pan:0,rev:.04,g:.9},perc:{pan:.15,rev:.08,g:.75},shak:{pan:.36,rev:.06,g:.7},glk:{pan:.3,rev:.32,g:.45},nat:{rev:.25,g:.6},hb:{post:true,g:1},fid:{pan:-.3,rev:.15,g:.5}},

@@ -6,7 +6,7 @@ var W=NS.W,M=NS.M,EP=NS.EP,SUB=NS.SUB,SAWB=NS.SAWB,CH=NS.CH,GTR=NS.GTR,MAND=NS.M
 /* ---- (c) whimsical orchestral ---- */
 PB.addStyle({id:'orch',label:'ORCHESTRA',short:'strings · winds',stripe:'#c4a24a',nm:'Whimsical orchestral',
  ds:'Pizzicato strings; flute and clarinet call-and-response; bassoon bass; harp, glockenspiel, timpani; hall reverb.',
- bpm:{gentle:80,lively:116,warm:92,quiet:66,theme:100,stroll:108,tense:108,epic:128},
+ bpm:{gentle:80,lively:116,warm:92,quiet:66,theme:100,stroll:108,tense:108,epic:128},fast:{rush:212,chase:232},
  swing:{def:.53,lively:.5,epic:.5},grid:8,ir:{sec:2.6,damp:.6,pre:.025},revRet:.75,master:[{t:'highshelf',f:6000,g:-2}],dangerCut:1900,
  parts:{pv:{pan:-.32,rev:.3,g:.55,hp:150},pc:{pan:.3,rev:.28,g:.75,lp:2500},str:{pan:0,rev:.38,g:.6},fl:{pan:-.15,rev:.32,g:.9},cl:{pan:.2,rev:.32,g:.9},ob:{pan:.1,rev:.3,g:.85},bsn:{pan:.12,rev:.22,g:.85},
   hn:{pan:-.25,rev:.4,g:.75},hp:{pan:-.42,rev:.34,g:.55},glk:{pan:.36,rev:.36,g:.42},timp:{rev:.3,g:.9},perc:{pan:.2,rev:.3,g:.6},nat:{rev:.3,g:.5},hb:{post:true,g:1}},

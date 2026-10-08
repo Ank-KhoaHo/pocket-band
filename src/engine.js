@@ -54,25 +54,35 @@ var PTENSE=[[0],[0],[5],[5],[3],[3],[4],[4],[0],[0],[5],[5],[1],[1],[4],[4]];
 var PDREAM=[[0],[1],[0],[1],[5],[1],[4],[0],[0],[1],[5],[4],[0],[1],[4],[0]];
 /* Dorian's vi is diminished, so Mystery leans on i and the major IV instead */
 var PMYST=[[0],[3],[0],[3],[0],[6],[3],[0],[2],[6],[3],[4],[0],[3],[6],[0]];
+/* Phrygian's v is diminished, so Spooky leans on i and the major bII instead */
+var PSPOOK=[[0],[1],[0],[1],[5],[1],[3],[0],[0],[1],[6],[3],[5],[1],[0],[0]];
 function rot(a,n){return a.slice(n).concat(a.slice(0,n))}
-var MODES={ion:[0,2,4,5,7,9,11],lyd:[0,2,4,6,7,9,11],mix:[0,2,4,5,7,9,10],dor:[0,2,3,5,7,9,10],aeo:[0,2,3,5,7,8,10],harm:[0,2,3,5,7,8,11]};
-var MODEN={ion:'major',lyd:'Lydian',mix:'Mixolydian',dor:'Dorian',aeo:'minor',harm:'harmonic minor'};
+var MODES={ion:[0,2,4,5,7,9,11],lyd:[0,2,4,6,7,9,11],mix:[0,2,4,5,7,9,10],dor:[0,2,3,5,7,9,10],phr:[0,1,3,5,7,8,10],aeo:[0,2,3,5,7,8,10],harm:[0,2,3,5,7,8,11]};
+var MODEN={ion:'major',lyd:'Lydian',mix:'Mixolydian',dor:'Dorian',phr:'Phrygian',aeo:'minor',harm:'harmonic minor'};
 var KEYN=['C','D♭','D','E♭','E','F','F♯','G','A♭','A','B♭','B'];
 function semi(mode,d){var s=MODES[mode],o=Math.floor(d/7),i=d-7*o;return 12*o+s[i]}
-/* a mood = an arrangement (arr) in its own key, mode and chords; tm scales the arrangement's tempo */
+/* a mood = an arrangement (arr) in its own key, mode and chords. tm scales the arrangement's tempo;
+   fast ('rush'|'chase') takes the style's own fast tempo instead; gate shortens melodic notes;
+   tex adds a texture over the whole loop. */
 var CUES=[
  {id:'gentle',nm:'Gentle',grp:'Calm',arr:'gentle',key:5,mode:'ion',prog:P,mel:'theme'},
  {id:'quiet',nm:'Quiet',grp:'Calm',arr:'quiet',key:9,mode:'aeo',prog:P,mel:'theme',softV:true},
  {id:'dreamy',nm:'Dreamy',grp:'Calm',arr:'quiet',key:2,mode:'lyd',prog:PDREAM,mel:'theme',tm:1.08},
+ {id:'rainy',nm:'Rainy',grp:'Calm',arr:'quiet',key:5,mode:'aeo',prog:P,mel:'theme',softV:true,tm:.95,tex:'rain'},
  {id:'theme',nm:'Theme',grp:'Bright',arr:'theme',key:0,mode:'ion',prog:P,mel:'theme'},
  {id:'lively',nm:'Lively',grp:'Bright',arr:'lively',key:7,mode:'ion',prog:P,mel:'theme'},
+ {id:'playful',nm:'Playful',grp:'Bright',arr:'lively',key:2,mode:'ion',prog:P,mel:'theme',tm:1.12,gate:.5},
  {id:'stroll',nm:'Stroll',grp:'Bright',arr:'stroll',key:3,mode:'ion',prog:rot(P,8),mel:'rot8'},
  {id:'warm',nm:'Warm',grp:'Bright',arr:'warm',key:2,mode:'mix',prog:PWARM,mel:'theme'},
  {id:'mystery',nm:'Mystery',grp:'Moody',arr:'warm',key:4,mode:'dor',prog:PMYST,mel:'theme',tm:.92},
  {id:'melancholy',nm:'Melancholy',grp:'Moody',arr:'gentle',key:2,mode:'aeo',prog:P,mel:'theme',softV:true,tm:.88},
+ {id:'spooky',nm:'Spooky',grp:'Moody',arr:'quiet',key:11,mode:'phr',prog:PSPOOK,mel:'theme',tm:.85},
+ {id:'adventure',nm:'Adventure',grp:'Bold',arr:'stroll',key:7,mode:'mix',prog:PWARM,mel:'theme',tm:1.1},
  {id:'tense',nm:'Tense',grp:'Bold',arr:'tense',key:4,mode:'harm',prog:PTENSE,mel:'motif'},
  {id:'epic',nm:'Epic',grp:'Bold',arr:'epic',key:0,mode:'harm',prog:P,mel:'theme'},
- {id:'heroic',nm:'Heroic',grp:'Bold',arr:'epic',key:10,mode:'ion',prog:P,mel:'theme',tm:.9}];
+ {id:'triumph',nm:'Triumph',grp:'Bold',arr:'epic',key:10,mode:'ion',prog:P,mel:'theme',tm:.9},
+ {id:'rush',nm:'Rush',grp:'Fast',arr:'lively',key:9,mode:'ion',prog:P,mel:'theme',fast:'rush'},
+ {id:'chase',nm:'Chase',grp:'Fast',arr:'epic',key:2,mode:'harm',prog:P,mel:'theme',fast:'chase'}];
 var CUEI={};CUES.forEach(function(c,i){CUEI[c.id]=i});
 function buildMel(kind){var out=[];
  if(kind==='motif'){
@@ -136,7 +146,7 @@ function makeX(ctx,S,C,bpm,mask,seed){
  X.ev=[];X.evn=function(cat,m,t,d){X.ev.push({c:cat,m:m,t:t,d:d})};X.evd=function(part,kind,t,v){X.ev.push({c:part==='nat'?'fx':(part==='hb'?'hb':'perc'),k:kind,t:t,v:v})};
  return X}
 /* one note: humanised, recorded for the piano roll */
-function N(X,L,part,cat,inst,o,m,t,d,v){if(!X.on(L))return;if(L==='hi')v*=1.7;t+=(X.rng()-.5)*2*X.hum;v*=1+(X.rng()-.5)*.16;t=Math.max(0,t);X.evn(cat,m,t,d);var out=X.out(part);X.later(t,t+d+4,function(){inst(X,{m:m,t:t,d:d,v:v,out:out},o||{})})}
+function N(X,L,part,cat,inst,o,m,t,d,v){if(!X.on(L))return;if(X.C.gate&&cat!=='bass')d*=X.C.gate;if(L==='hi')v*=1.7;t+=(X.rng()-.5)*2*X.hum;v*=1+(X.rng()-.5)*.16;t=Math.max(0,t);X.evn(cat,m,t,d);var out=X.out(part);X.later(t,t+d+4,function(){inst(X,{m:m,t:t,d:d,v:v,out:out},o||{})})}
 
 /* =====================================================================
    ARRANGING HELPERS (bars: an array of bar indices)
@@ -184,6 +194,7 @@ function seedOf(si,ci){return 1000+si*97+ci*13}
 function renderRaw(si,ci,mask){var S=STY[si],C=CUES[ci],bpm=bpmOf(S,C),spb=60/bpm,loopSec=64*spb,tail=4;
  var ctx=new OfflineAudioContext(2,Math.ceil((loopSec+tail)*SR),SR),X=makeX(ctx,S,C,bpm,mask,seedOf(si,ci)),t0=performance.now();
  S.arrange(X);if(mask==='hb'&&C.arr!=='tense')hearts(X,ALL);
+ if(C.tex==='rain'&&(mask==='all'||mask==='base'))NS.rain(X);
  runJobs(ctx,X,loopSec+tail);
  return ctx.startRendering().then(function(buf){var L=Math.round(loopSec*SR),ch=[new Float32Array(L),new Float32Array(L)];
   for(var c=0;c<2;c++){var d=buf.getChannelData(c),o=ch[c];for(var i=0;i<d.length;i++)o[i%L]+=d[i]}
@@ -209,10 +220,10 @@ function getStems(si,ci){var k='stems|'+si+'|'+ci;if(CACHE[k])return CACHE[k];
 /* ---------- styles register themselves (src/styles/*.js) ---------- */
 var STY=[],STYI={};
 function addStyle(s){STYI[s.id]=STY.length;STY.push(s)}
-function bpmOf(S,C){return S.bpm[C.id]||Math.round(S.bpm[C.arr]*(C.tm||1))}
+function bpmOf(S,C){return C.fast?S.fast[C.fast]:S.bpm[C.id]||Math.round(S.bpm[C.arr]*(C.tm||1))}
 
 Object.assign(NS,{SR:SR,TARGET:TARGET,clamp:clamp,rng:rng,mtof:mtof,R:R,rot:rot,lufs:lufs,THEME:THEME,
- P:P,PWARM:PWARM,PTENSE:PTENSE,PDREAM:PDREAM,PMYST:PMYST,MODES:MODES,MODEN:MODEN,KEYN:KEYN,semi:semi,
+ P:P,PWARM:PWARM,PTENSE:PTENSE,PDREAM:PDREAM,PMYST:PMYST,PSPOOK:PSPOOK,MODES:MODES,MODEN:MODEN,KEYN:KEYN,semi:semi,
  CUES:CUES,CUEI:CUEI,buildMel:buildMel,makeX:makeX,N:N,pick:pick,strum:strum,block:block,padSeg:padSeg,
  arp:arp,ost:ost,bassl:bassl,melody:melody,harm:harm,drums:drums,fill:fill,sparkle:sparkle,hearts:hearts,
  ALL:ALL,ODD2:ODD2,renderRaw:renderRaw,toBuf:toBuf,peakOf:peakOf,CACHE:CACHE,getCue:getCue,getStems:getStems,

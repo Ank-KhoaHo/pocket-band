@@ -135,7 +135,16 @@ function crackle(X,L,dens){if(!X.on(L))return;var c=X.ctx,len=Math.ceil(X.loopSe
  for(var i=0;i<len;i++){d[i]=(r()*2-1)*.004;if(r()<dens/SR){var a=(r()*.5+.2)*(r()<.1?2:1);for(var j=0;j<20&&i+j<len;j++)d[i+j]+=a*Math.exp(-j/3)*(j%2?-1:1)}}
  var s=c.createBufferSource(),f=c.createBiquadFilter();s.buffer=b;f.type='highpass';f.frequency.value=900;s.connect(f);f.connect(X.out('vinyl'));s.start(0)}
 
-var EXP={noiseBuf:noiseBuf,crushBuf:crushBuf,ksBuf:ksBuf,IR:IR,satCurve:satCurve,ks:ks,ep:ep,MAL:MAL,mallet:mallet,WIND:WIND,wind:wind,chip:chip,bassv:bassv,trem:trem,GTR:GTR,MAND:MAND,BASSU:BASSU,PIZZ:PIZZ,PIZZC:PIZZC,HARP:HARP,GTRM:GTRM,W:W,M:M,EP:EP,SUB:SUB,SAWB:SAWB,CH:CH,D:D,tone:tone,nz:nz,drum:drum,birds:birds,crickets:crickets,crackle:crackle};
+/* rain: a soft noise bed plus random droplets, one buffer exactly a loop long (the fold makes it seamless) */
+function rain(X,part){var c=X.ctx,len=Math.ceil(X.loopSec*SR),b=new AudioBuffer({length:len,numberOfChannels:2,sampleRate:SR}),r=rng(4242);
+ for(var ch=0;ch<2;ch++){var d=b.getChannelData(ch),lp=0;
+  for(var i=0;i<len;i++){lp+=(r()*2-1-lp)*.35;d[i]=lp*.05}
+  var drops=Math.round(X.loopSec*14);for(var k=0;k<drops;k++){var at=Math.floor(r()*len),f=2200+r()*3800,a=.05+r()*.12,dk=.004+r()*.01;
+   for(var j=0;j<Math.floor(dk*SR*5)&&at+j<len;j++){var tt=j/SR;d[at+j]+=a*Math.exp(-tt/dk)*Math.sin(2*Math.PI*f*tt*(1-tt*8))}}}
+ var s=c.createBufferSource(),hp=c.createBiquadFilter(),lpf=c.createBiquadFilter();s.buffer=b;hp.type='highpass';hp.frequency.value=380;lpf.type='lowpass';lpf.frequency.value=7000;
+ s.connect(hp);hp.connect(lpf);lpf.connect(X.out(part||'rain'));s.start(0);X.evd('nat','rain',0,.5)}
+
+var EXP={noiseBuf:noiseBuf,crushBuf:crushBuf,ksBuf:ksBuf,IR:IR,satCurve:satCurve,ks:ks,ep:ep,MAL:MAL,mallet:mallet,WIND:WIND,wind:wind,chip:chip,bassv:bassv,trem:trem,GTR:GTR,MAND:MAND,BASSU:BASSU,PIZZ:PIZZ,PIZZC:PIZZC,HARP:HARP,GTRM:GTRM,W:W,M:M,EP:EP,SUB:SUB,SAWB:SAWB,CH:CH,D:D,tone:tone,nz:nz,drum:drum,birds:birds,crickets:crickets,crackle:crackle,rain:rain};
 Object.assign(NS,EXP);
 PB.inst=EXP;
 })();

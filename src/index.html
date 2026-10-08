@@ -211,8 +211,8 @@ var LISTEN={gentle:'Opens quietly; the bass joins at bar 5 and the percussion at
  melancholy:'The gentle arrangement moved into minor and slowed down.',
  tense:'Harmonic minor, a heartbeat, an ostinato and a low-pass filter. The call shrinks to a 2-bar motif that keeps climbing.',
  epic:'The tune in harmonic minor, faster, over a driving bass ostinato and heavy drums.',
- heroic:'The driving arrangement back in major: a bold march.'};
-function listenFor(si,ci){return '<b>Listen for:</b> '+LISTEN[CUES[ci].id]+' <b>Band:</b> '+STY[si].inst+'.'}
+ triumph:'The driving arrangement back in major: a bold march.'};
+function listenFor(si,ci){return '<b>Listen for:</b> '+(LISTEN[CUES[ci].id]||'')+' <b>Band:</b> '+STY[si].inst+'.'}
 
 /* =====================================================================
    PIANO ROLL
@@ -245,7 +245,7 @@ var TOURS={
  rise:{nm:'Rise and rest',segs:[['gentle',4],['lively',4],['warm',4],['quiet',4]]},
  story:{nm:'A short story',segs:[['theme',4],['stroll',4],['lively',4],['epic',4]]},
  swell:{nm:'The swell',segs:[['lively',4,0],['lively',4,1],['lively',4,2],['lively',2,1],['lively',2,0]]},
- dark:{nm:'Into the dark',segs:[['mystery',4],['melancholy',4],['tense',4],['heroic',4]]},
+ dark:{nm:'Into the dark',segs:[['mystery',4],['melancholy',4],['tense',4],['triumph',4]]},
  long:{nm:'The long way',segs:[['theme',4],['stroll',4],['gentle',4],['lively',2,0],['lively',2,1],['lively',4,2],['epic',4]]}};
 var STN=['Calm','Build','Tense'];
 function segName(s){return cueName(CUEI[s[0]])+(s.length>2?' · '+STN[s[2]]:'')}
@@ -287,7 +287,7 @@ function drawTL(){var Wd=tl.width,Hd=tl.height;tx.fillStyle='#100e0c';tx.fillRec
 /* =====================================================================
    PAGE: buttons, keys, preferences
    ===================================================================== */
-var NEWM={dreamy:1,mystery:1,melancholy:1,heroic:1};
+var NEWM={rainy:1,playful:1,spooky:1,adventure:1,rush:1,chase:1};
 $('#styles').innerHTML=STY.map(function(s,i){return '<button class="opt" data-style="'+i+'" aria-pressed="false"><span class="key">'+(i+1)+'</span><span class="nm">'+s.nm+'</span><span class="ds">'+s.ds+'</span></button>'}).join('');
 var ch='',lastG='';CUES.forEach(function(c,i){if(c.grp!==lastG){ch+='<span class="gl">'+c.grp+'</span>';lastG=c.grp}ch+='<button class="cue" data-cue="'+i+'" aria-pressed="false">'+c.nm+(NEWM[c.id]?'<span class="nw">NEW</span>':'')+'</button>'});$('#cues').innerHTML=ch;
 $('#jcards').innerHTML=Object.keys(TOURS).map(function(k){var T=TOURS[k];return '<div class="card"><h3>'+T.nm+'</h3><p>'+T.segs.map(segName).join(' → ')+'</p><button class="btn" data-tour="'+k+'" aria-pressed="false">▶ Play</button></div>'}).join('');
