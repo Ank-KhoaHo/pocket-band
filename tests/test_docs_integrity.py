@@ -418,6 +418,8 @@ def test_the_index_still_agrees_with_its_source():
     rows = dict(re.findall(r'<tr data-id="([^"]+)".*?<span class="chip chip-\w+">(\w+)</span>', page))
     specs = {}
     for path in sorted((_repo_root() / SPECS_DIR).glob("*.md")):
+        if re.match(r"^20[0-9]{2}-", path.name):
+            continue  # a dated design doc, not a ticket -- the builder skips it the same way
         text = path.read_text(encoding="utf-8")
         tid = re.match(r"^#\s+(\S+)", text).group(1)
         specs[tid] = re.search(r"^\*\*Status:\*\*\s*(\S+)", text, re.M).group(1)
