@@ -1,0 +1,134 @@
+/* Pocket Band -- the tape deck. A warm grey case, a dark deck, one green phosphor display. */
+:root{
+  --room:#bfb39d; --case:#d8cfbf; --case-lo:#c9bea9; --case-edge:#a89c86;
+  --deck:#2b2620; --deck-key:#3a332b; --ink:#2b2620; --silk:#d6c9b0;
+  --amber:#ffb347; --orange:#ff6a3d; --paper:#f4ead6;
+  --lcd:#10150e; --phos:#9dff7a; --phos-dim:#9dff7a66;
+  --pad:#ece3d1; --pad-on:#9dff7a; --fast:#ffd7c9;
+  --display:"Michroma","Eurostile","Arial Narrow",sans-serif;
+  --readout:"VT323","Courier New",monospace;
+  --text:"Barlow",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--room);color:var(--ink);font:500 15px/1.4 var(--text)}
+body{padding:18px 16px 28px;overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+kbd{font:600 11px var(--text);border:1px solid currentColor;border-radius:3px;padding:0 4px;opacity:.75}
+
+/* ---------- the case ---------- */
+.unit{max-width:1120px;margin:0 auto;background:linear-gradient(#ddd4c4,var(--case-lo));border:1px solid var(--case-edge);border-radius:20px;
+  padding:16px 18px 18px;box-shadow:inset 0 2px 0 #fff7,0 14px 34px #3a2f2055}
+.brand{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:0 4px 12px}
+.brand h1{font:400 20px/1 var(--display);letter-spacing:.14em;margin:0;text-transform:uppercase}
+.brand .model{font-size:10px;letter-spacing:.25em;opacity:.55;margin-left:6px}
+.tagline{margin:0;font:400 9px var(--display);letter-spacing:.24em;text-transform:uppercase;opacity:.55;flex:1}
+.chip{background:transparent;border:1px solid var(--case-edge);border-radius:99px;padding:4px 11px;font:600 12px var(--text)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.lab{display:block;font:400 9px var(--display);letter-spacing:.22em;text-transform:uppercase;margin:0 0 6px;opacity:.65}
+.lab kbd{font-size:10px;letter-spacing:0;margin-left:2px}
+
+/* ---------- the deck ---------- */
+.deck{background:var(--deck);border-radius:13px;padding:14px;display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:16px;
+  box-shadow:inset 0 1px 0 #ffffff14,inset 0 -2px 0 #0006}
+.lcd{position:relative;background:var(--lcd);border-radius:9px;padding:10px 12px 8px;color:var(--phos);overflow:hidden;min-width:0;
+  box-shadow:inset 0 0 26px #000,inset 0 0 0 1px #000}
+.lcd:after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,#0000 0 2px,#0000002e 2px 3px);border-radius:9px}
+.lcd-top{display:flex;justify-content:space-between;align-items:center;gap:10px;font:400 18px/1 var(--readout);position:relative;z-index:1}
+#nowStatus{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.lcd-tools{display:flex;gap:8px;align-items:center;flex:none}
+.view{display:flex;border:1px solid var(--phos-dim);border-radius:4px;overflow:hidden}
+.view button{background:none;border:0;color:var(--phos);font:400 16px/1 var(--readout);padding:2px 8px}
+.view button[aria-pressed="true"]{background:var(--phos);color:var(--lcd)}
+.fav{background:none;border:0;font-size:20px;line-height:1;color:#ff6a8a55;padding:0 2px}
+.fav[aria-pressed="true"]{color:#ff6a8a;text-shadow:0 0 8px #ff6a8a99}
+.lcd-title{font:400 34px/1.05 var(--readout);letter-spacing:.03em;margin-top:6px;text-shadow:0 0 10px #9dff7a55;position:relative;z-index:1;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lcd-meta{font:400 19px/1.1 var(--readout);opacity:.85;min-height:21px;position:relative;z-index:1}
+#lcd{display:block;width:100%;height:170px;margin-top:6px}
+.lcd-legend{display:flex;gap:10px;flex-wrap:wrap;font:400 15px/1 var(--readout);opacity:.8;margin-top:4px;position:relative;z-index:1}
+.lcd-legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px}
+
+.controls{display:flex;flex-direction:column;gap:12px;color:var(--silk);min-width:0}
+.controls .lab{color:var(--silk)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.key{background:var(--deck-key);color:#f1e6d2;border:1px solid #000;border-bottom-width:3px;border-radius:7px;font:400 11px var(--display);
+  letter-spacing:.06em;padding:9px 11px;min-height:40px;transition:transform .06s}
+.key:active{transform:translateY(2px);border-bottom-width:1px}
+.key.play{background:var(--orange);color:var(--ink);font-size:13px;padding:10px 16px;min-width:116px}
+.key.play[aria-pressed="true"]{background:var(--amber)}
+.key.wav{background:#4a4036}
+.key.small{background:var(--deck);font-size:10px;min-height:34px;padding:7px 11px}
+.sw{display:flex;border:1px solid #000;border-radius:7px;overflow:hidden;width:max-content;max-width:100%}
+.sw button{background:var(--deck-key);border:0;border-right:1px solid #000;color:var(--silk);font:400 10px var(--display);letter-spacing:.06em;padding:9px 9px;min-height:36px}
+.sw button:last-child{border-right:0}
+.sw button[aria-pressed="true"]{background:var(--phos);color:var(--ink)}
+.knobs{display:flex;gap:22px;align-items:flex-end;margin-top:2px}
+.knobw{display:flex;flex-direction:column;align-items:center;gap:5px;font:400 9px var(--display);letter-spacing:.14em;text-transform:uppercase}
+.knob{--a:0deg;width:52px;height:52px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#6b5e4e,#1d1915 70%);border:2px solid #000;position:relative;touch-action:none;cursor:ns-resize}
+.knob:after{content:"";position:absolute;left:calc(50% - 2px);top:5px;width:4px;height:14px;border-radius:2px;background:var(--amber);transform-origin:2px 21px;transform:rotate(var(--a))}
+
+/* ---------- the shelf: cassettes ---------- */
+.shelf{margin-top:16px}
+.tapes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
+.tape{position:relative;text-align:left;background:var(--paper);border:2px solid #b9ab92;border-radius:8px;padding:9px 9px 7px;transition:transform .12s,box-shadow .12s}
+.tape:hover{border-color:#8e8170}
+.tape[aria-pressed="true"]{border-color:var(--orange);background:#ffe2c7;transform:translateY(-4px);box-shadow:0 5px 0 #ff6a3d55}
+.tape .stripe{position:absolute;left:0;right:0;top:0;height:5px;border-radius:6px 6px 0 0}
+.tape .nm{display:block;font:400 10.5px/1.2 var(--display);letter-spacing:.05em;text-transform:uppercase;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tape .sh{display:block;font:500 12px var(--text);opacity:.65}
+.tape .n{position:absolute;right:7px;top:9px;font:600 11px var(--text);opacity:.45}
+.tape .new{display:inline-block;font:700 9px var(--text);background:var(--orange);color:#fff;border-radius:3px;padding:0 4px;margin-left:5px;vertical-align:1px;letter-spacing:.04em}
+.reels{display:flex;justify-content:space-between;align-items:center;margin-top:7px;background:var(--deck);border-radius:5px;padding:5px 12px}
+.reel{width:17px;height:17px;border-radius:50%;background:radial-gradient(var(--paper) 22%,var(--deck) 24% 44%,#8a7d68 46% 58%,var(--deck) 60%);position:relative}
+.reel:after{content:"";position:absolute;inset:2px;border-radius:50%;background:conic-gradient(#0000 0 20deg,#f4ead6aa 20deg 30deg,#0000 30deg 140deg,#f4ead6aa 140deg 150deg,#0000 150deg 260deg,#f4ead6aa 260deg 270deg,#0000 270deg)}
+.reels .window{flex:1;height:5px;margin:0 6px;border-radius:3px;background:#5c5045}
+.tape.spinning .reel{animation:spin 1.6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- moods: pads ---------- */
+.moods{margin-top:14px}
+.pads{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.pad{position:relative;background:var(--pad);border:1px solid var(--case-edge);border-bottom-width:4px;border-radius:8px;padding:10px 4px 8px;text-align:center;
+  font:400 10.5px/1.2 var(--display);letter-spacing:.05em;text-transform:uppercase;transition:transform .06s}
+.pad:active{transform:translateY(2px);border-bottom-width:2px}
+.pad.fast{background:var(--fast)}
+.pad[aria-pressed="true"]{background:var(--pad-on);border-color:#4f8f3a}
+.pad .dot{position:absolute;left:7px;top:7px;width:7px;height:7px;border-radius:50%}
+.pad .g{display:block;font:500 11.5px var(--text);text-transform:none;letter-spacing:0;opacity:.6;margin-top:2px}
+
+/* ---------- bottom: mixtapes and my plays ---------- */
+.bottom{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:12px;margin-top:16px}
+.panel{background:var(--pad);border:1px solid var(--case-edge);border-radius:11px;padding:11px 13px}
+.mixes{display:flex;gap:8px;flex-wrap:wrap}
+.mixtape{background:var(--deck);color:var(--amber);border:1px solid #000;border-radius:7px;padding:8px 11px;text-align:left;max-width:100%}
+.mixtape b{display:block;font:400 10.5px var(--display);letter-spacing:.06em;text-transform:uppercase;font-weight:400}
+.mixtape span{display:block;font:500 12px var(--text);color:var(--silk);margin-top:2px}
+.mixtape[aria-pressed="true"]{background:var(--amber);color:var(--ink)}
+.mixtape[aria-pressed="true"] span{color:var(--ink)}
+.plays{margin:0 0 8px;padding-left:22px;font:500 14px/1.6 var(--text)}
+.plays .t{opacity:.6;margin-left:6px}
+.plays .h{color:#d4325a;margin-left:4px}
+.empty{margin:0 0 8px;font:500 13px var(--text);opacity:.65}
+#favCount{color:#d4325a;letter-spacing:.1em}
+.keys{margin:14px 4px 0;font:500 12.5px var(--text);opacity:.7}
+
+/* ---------- narrow screens ---------- */
+@media (max-width:900px){.tapes{grid-template-columns:repeat(5,minmax(0,1fr))}.pads{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:760px){
+  body{padding:10px 8px 20px}
+  .unit{padding:12px;border-radius:16px}
+  .deck{grid-template-columns:minmax(0,1fr)}
+  .tapes{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 8px}
+  .tape{flex:0 0 150px;scroll-snap-align:start}
+  .tape .n{display:none}
+  .pads{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .pad{font-size:9px;letter-spacing:.01em;padding:14px 3px 7px;overflow:hidden}
+  .pad .dot{left:6px;top:5px;width:6px;height:6px}
+  .pad .g{font-size:11px}
+  .bottom{grid-template-columns:minmax(0,1fr)}
+  .lcd-title{font-size:28px}
+  #lcd{height:140px}
+}
+@media (prefers-reduced-motion:reduce){.tape.spinning .reel{animation:none}}
+.rm .tape.spinning .reel{animation:none}
