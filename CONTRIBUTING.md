@@ -8,10 +8,14 @@ just the mechanics of building and testing it.
 
 ## Building and testing
 
-This template ships with no build system, so there is nothing to run yet. Once a language and a
-build system are chosen, the real build and test commands belong in this section — it is the
-first place a contributor looks, so keep it current rather than letting it drift from whatever
-actually runs in CI.
+There is no build step. The whole player is [`src/index.html`](src/index.html): edit it, then
+open it in a browser and listen. A change to the music is only checked by hearing it.
+
+The repository's own checks are a docs guard:
+
+```bash
+python -m pytest
+```
 
 ## Branching and pull requests
 
