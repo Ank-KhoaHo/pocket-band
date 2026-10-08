@@ -222,6 +222,22 @@ function getStems(si,ci){var k='stems|'+si+'|'+ci;if(CACHE[k])return CACHE[k];
  remember(k,p);return p}
 
 
+/* ---------- export: the loop as a 16-bit stereo WAV, and the layer mixes the player can play ---------- */
+function encodeWav(buf){var L=buf.length,nc=2,ab=new ArrayBuffer(44+L*nc*2),v=new DataView(ab),o=0;
+ function s(x){for(var i=0;i<x.length;i++)v.setUint8(o++,x.charCodeAt(i))}function u32(x){v.setUint32(o,x,true);o+=4}function u16(x){v.setUint16(o,x,true);o+=2}
+ s('RIFF');u32(36+L*nc*2);s('WAVE');s('fmt ');u32(16);u16(1);u16(nc);u32(SR);u32(SR*nc*2);u16(nc*2);u16(16);s('data');u32(L*nc*2);
+ var ch=[buf.getChannelData(0),buf.getChannelData(buf.numberOfChannels>1?1:0)];
+ for(var i=0;i<L;i++)for(var c=0;c<nc;c++){var x=Math.max(-1,Math.min(1,ch[c][i]));v.setInt16(o,Math.round(x*32767),true);o+=2}
+ return ab}
+function wavName(S,C,bpm){return 'pocket-band_'+S.id+'_'+C.id+'_'+Math.round(bpm)+'bpm.wav'}
+/* calm = base; build = base + hi; tense = (base + hi) low-passed at 600 Hz + heartbeat. Rendered over two
+   loops and the second kept, so the filter has settled and the result still loops seamlessly. */
+function mixLayer(st,layer){var L=st.base.length,ctx=new OfflineAudioContext(2,L*2,SR),bus=ctx.createGain();bus.connect(ctx.destination);
+ function src(b,dest,g){var s=ctx.createBufferSource(),gn=ctx.createGain();s.buffer=b;s.loop=true;gn.gain.value=g;s.connect(gn);gn.connect(dest);s.start(0)}
+ var into=bus;if(layer==='tense'){var lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=600;lp.Q.value=.7;lp.connect(bus);into=lp}
+ src(st.base,into,1);if(layer!=='calm')src(st.hi,into,1);if(layer==='tense')src(st.hb,bus,1.1);
+ return ctx.startRendering().then(function(b){var ch=[b.getChannelData(0).slice(L,2*L),b.getChannelData(1).slice(L,2*L)],g=Math.pow(10,(TARGET-lufs(ch,SR))/20);return toBuf(ch,L,g)})}
+
 /* ---------- styles register themselves (src/styles/*.js) ---------- */
 var STY=[],STYI={};
 function addStyle(s){STYI[s.id]=STY.length;STY.push(s)}
@@ -240,5 +256,5 @@ Object.assign(PB,{SR:SR,TARGET:TARGET,util:{rng:rng,mtof:mtof,clamp:clamp,R:R,ro
   bassl:bassl,melody:melody,harm:harm,drums:drums,fill:fill,sparkle:sparkle,hearts:hearts,
   birds:function(){return NS.birds.apply(null,arguments)},crickets:function(){return NS.crickets.apply(null,arguments)},
   crackle:function(){return NS.crackle.apply(null,arguments)},ALL:ALL,ODD2:ODD2},
- renderRaw:renderRaw,getLoop:getCue,getStems:getStems,snapPenta:snapPenta});
+ renderRaw:renderRaw,getLoop:getCue,getStems:getStems,snapPenta:snapPenta,encodeWav:encodeWav,wavName:wavName,mixLayer:mixLayer});
 })();
