@@ -24,6 +24,12 @@ python -m venv .venv
 The full run renders all 180 loops and takes about 30 minutes. While working on one style, run
 `-k <style id>`. A skipped test counts as a failure.
 
+## Exporting and publishing
+
+`python scripts/export_html.py` writes `dist/pocket-band.html`: the whole player in one
+self-contained file. The `pages` workflow runs it on every push to `main` and publishes the
+result to GitHub Pages; attach the same file to a Release for offline play.
+
 ## Where the code lives
 
 | File | Holds |

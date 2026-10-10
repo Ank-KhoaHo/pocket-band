@@ -37,3 +37,7 @@ Thumbs.db
 /CLAUDE.md
 /DEVELOPMENT-CHECKLIST.md
 /BACKLOG.html
+
+# Exported single-file builds (scripts/export_html.py) -- generated, never committed.
+/dist/
+/site/

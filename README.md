@@ -11,7 +11,11 @@ reverb. Use it as background music, or to pick loops for a game.
 
 ## Play it
 
-Open [`src/index.html`](src/index.html) in a browser, pick a cassette and a mood, and press
+**Play it online:** <https://ank-khoaho.github.io/pocket-band/> — or download
+`pocket-band.html` from the [latest release](https://github.com/Ank-KhoaHo/pocket-band/releases/latest)
+and open it: it is the whole player in one file.
+
+To run it from a clone, open [`src/index.html`](src/index.html) in a browser, pick a cassette and a mood, and press
 **Play**. The only thing it fetches is its fonts.
 
 - **10 cassettes (styles):** folk, lo-fi, orchestra, chiptune, ambient, jazz café, synthwave,

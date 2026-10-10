@@ -29,7 +29,7 @@ def browser():
         b.close()
 
 
-def open_page(browser, init_script=None, viewport=None):
+def open_page(browser, init_script=None, viewport=None, url=None):
     ctx = browser.new_context(viewport=viewport or {"width": 1280, "height": 800},
                               accept_downloads=True)
     if init_script:
@@ -38,7 +38,7 @@ def open_page(browser, init_script=None, viewport=None):
     pg.errors = []
     pg.on("pageerror", lambda e: pg.errors.append(str(e)))
     pg.on("console", lambda m: pg.errors.append(m.text) if m.type == "error" else None)
-    pg.goto(INDEX.as_uri())
+    pg.goto(url or INDEX.as_uri())
     pg.wait_for_function("window.PB && PB.ready === true", timeout=15000)
     return pg
 
