@@ -38,6 +38,9 @@ Thumbs.db
 /DEVELOPMENT-CHECKLIST.md
 /BACKLOG.html
 
+# Read by scripts/check_leaks.py. Local to each maintainer, like the rules above.
+/.leak-patterns.local
+
 # Exported single-file builds (scripts/export_html.py) -- generated, never committed.
 /dist/
 /site/
