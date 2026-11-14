@@ -189,6 +189,10 @@ MIN_LINKS_CI = 6
 MIN_ROWS = 8
 PUBLIC_MD_MAX_LINES = 35
 
+# What must never be tracked. scripts/backup_working_half.py saves everything on this list,
+# and tests/test_backup.py keeps its own list from falling behind this one.
+WORKING_MATERIAL = ("docs/", "CLAUDE.md", "DEVELOPMENT-CHECKLIST.md", "BACKLOG.html", ".superpowers/")
+
 
 def test_the_working_material_is_never_tracked():
     """Runs in BOTH modes, because a leak switches the other assertions off.
@@ -210,8 +214,7 @@ def test_the_working_material_is_never_tracked():
     them into two functions would not change what either one verifies.
     """
     out = subprocess.run(
-        ["git", "ls-files", "--", "docs/", "CLAUDE.md",
-         "DEVELOPMENT-CHECKLIST.md", "BACKLOG.html", ".superpowers/"],
+        ["git", "ls-files", "--", *WORKING_MATERIAL],
         cwd=_repo_root(), capture_output=True, check=True, text=True,
         encoding="utf-8", errors="replace",
     ).stdout or ""
@@ -232,7 +235,7 @@ def test_the_working_material_is_never_tracked():
     # that by any OTHER means -- check_leaks.py's patterns are shaped to match
     # credential and inventory PROSE, not "a previously-ignored path is now
     # tracked", so this hardcoded list is the only place that check lives.
-    for p in ("docs/", "CLAUDE.md", "DEVELOPMENT-CHECKLIST.md", "BACKLOG.html", ".superpowers/"):
+    for p in WORKING_MATERIAL:
         assert _deliberately_unpublished(p), f"{p} is no longer covered by .gitignore"
 
     # F2: PUBLIC.md is the highest-risk file in this repo -- the one whose whole
