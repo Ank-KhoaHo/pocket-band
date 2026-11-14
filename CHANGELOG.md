@@ -9,6 +9,7 @@ by the version).
 ## Unreleased
 
 - The README says what pocket-band does not do, when to use something else, and answers the first questions.
+- The player has an icon in the browser tab, and a shared link shows a picture of it.
 
 ## 1.0.0 — 2026-10-10
 

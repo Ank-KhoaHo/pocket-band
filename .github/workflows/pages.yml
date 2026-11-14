@@ -35,6 +35,10 @@ jobs:
       - name: Export the single-file player
         run: python scripts/export_html.py site/index.html
 
+      # The page's link card names this picture at the site's address.
+      - name: Serve the cover
+        run: cp art/cover.png site/cover.png
+
       - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
 
       - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1

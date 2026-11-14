@@ -1,4 +1,16 @@
-# pocket-band
+<p align="center"><img src="art/icon.svg" width="112" height="112" alt="pocket-band icon: a cassette tape"></p>
+
+<h1 align="center">pocket-band</h1>
+
+<p align="center"><b>All sound made in code.</b> A tape-deck music player with no audio files.</p>
+
+<p align="center">
+<a href="https://github.com/Ank-KhoaHo/pocket-band/actions/workflows/ci.yml"><img src="https://github.com/Ank-KhoaHo/pocket-band/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+<a href="https://github.com/Ank-KhoaHo/pocket-band/releases/latest"><img src="https://img.shields.io/github/v/release/Ank-KhoaHo/pocket-band" alt="Latest release"></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/licence-CC%20BY%204.0-blue" alt="Licence: CC BY 4.0"></a>
+</p>
+
+<p align="center"><img src="art/banner.png" alt="The pocket-band player, a tape deck, playing the Synthwave cassette in the Lively mood"></p>
 
 A music player whose every tune is composed in code, in the browser, with the Web Audio API.
 

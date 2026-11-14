@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <title>pocket-band: a cassette</title>
+  <rect width="512" height="512" rx="112" fill="#2b2620"/>
+  <rect x="56" y="128" width="400" height="256" rx="28" fill="#f4ead6"/>
+  <rect x="56" y="164" width="400" height="44" fill="#ff6a3d"/>
+  <rect x="128" y="236" width="256" height="84" rx="42" fill="#10150e"/>
+  <circle cx="190" cy="278" r="30" fill="#9dff7a"/>
+  <circle cx="322" cy="278" r="30" fill="#9dff7a"/>
+  <circle cx="190" cy="278" r="11" fill="#10150e"/>
+  <circle cx="322" cy="278" r="11" fill="#10150e"/>
+  <path d="M136 384 L164 344 L348 344 L376 384 Z" fill="#c9bea9"/>
+</svg>
