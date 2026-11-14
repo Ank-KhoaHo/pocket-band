@@ -36,6 +36,8 @@ Thumbs.db
 /docs/
 /CLAUDE.md
 /DEVELOPMENT-CHECKLIST.md
+/AGENTS.md
+/QUESTIONS.md
 /BACKLOG.html
 
 # Read by scripts/check_leaks.py. Local to each maintainer, like the rules above.
