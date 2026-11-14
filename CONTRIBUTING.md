@@ -26,6 +26,9 @@ tests that need no browser, in about a minute. Its second renders all 180 loops,
 minutes. While working on one style, run `.venv/Scripts/python -m pytest -k <style id>`. A
 skipped test counts as a failure.
 
+Passing here is not passing in CI: CI runs on Linux, where a path separator, a line ending or
+the case of a file name can still differ.
+
 ## Exporting and publishing
 
 `python scripts/export_html.py` writes `dist/pocket-band.html`: the whole player in one
@@ -62,6 +65,9 @@ add a `Co-Authored-By` trailer.
 private — see [PUBLIC.md](PUBLIC.md) — its message describes the change, not the material. A
 commit message is published exactly like a file, permanently, and a summary of what was
 withheld is the same leak wearing different clothes.
+
+**A commit message may name a ticket; code may not.** A ticket number in a comment or a test
+name points at notes a reader cannot open. Say in the comment what the code does and why.
 
 ## What gets a pull request rejected
 

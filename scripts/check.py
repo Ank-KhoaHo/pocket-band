@@ -69,8 +69,10 @@ class StepResult:
 #
 # TWO STEPS, SPLIT BY WHAT A TEST NEEDS. tests/conftest.py marks every test that asks for the
 # browser. The docs and tooling tests run first and take about a minute; the player's tests
-# render all 180 loops in a browser and take about 30 minutes here, 18 on GitHub's runner. A
-# selection that finds no test makes pytest exit 5, so neither step can pass having run nothing.
+# render all 180 loops in a browser: about 18 minutes on GitHub's runner, 30 on an idle desktop,
+# and over 60 on a desktop whose processors are busy with other work. The limit is the CI job's
+# own. A selection that finds no test makes pytest exit 5, so neither step can pass having run
+# nothing.
 STEPS: list[Step] = [
     Step(
         name="tests",
@@ -80,7 +82,7 @@ STEPS: list[Step] = [
     Step(
         name="player",
         command=[sys.executable, "-m", "pytest", "-q", "-rfEs", "-m", "browser", "tests"],
-        timeout=3600,
+        timeout=5400,
     ),
 ]
 
