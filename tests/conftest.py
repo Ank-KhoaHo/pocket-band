@@ -15,6 +15,22 @@ INDEX = ROOT / "src" / "index.html"
 ARGS = ["--autoplay-policy=no-user-gesture-required"]
 
 
+def pytest_configure(config):
+    config.addinivalue_line("markers", "browser: the test drives a real browser; "
+                                       "scripts/check.py runs these as a step of their own")
+
+
+def pytest_collection_modifyitems(items):
+    """Mark every test that asks for the browser, directly or through `page`.
+
+    Read from the fixtures a test uses, never from a list of files: a new browser test is
+    marked the day it is written.
+    """
+    for item in items:
+        if "browser" in getattr(item, "fixturenames", ()):
+            item.add_marker(pytest.mark.browser)
+
+
 @pytest.fixture(scope="session")
 def browser():
     # Imported here, not at the top: the docs-guard CI job installs only pytest and

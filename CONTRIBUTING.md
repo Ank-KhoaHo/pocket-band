@@ -18,11 +18,13 @@ The automated checks run the player in headless Chrome through Playwright:
 python -m venv .venv
 .venv/Scripts/python -m pip install -r requirements-dev.txt   # .venv/bin/python on Linux/macOS
 .venv/Scripts/python -m playwright install chromium            # not needed if Chrome is installed
-.venv/Scripts/python -m pytest
+.venv/Scripts/python scripts/check.py
 ```
 
-The full run renders all 180 loops and takes about 30 minutes. While working on one style, run
-`-k <style id>`. A skipped test counts as a failure.
+`scripts/check.py` runs every check, and CI runs the same script. Its first step runs the
+tests that need no browser, in about a minute. Its second renders all 180 loops, in about 30
+minutes. While working on one style, run `.venv/Scripts/python -m pytest -k <style id>`. A
+skipped test counts as a failure.
 
 ## Exporting and publishing
 
