@@ -47,14 +47,16 @@ def test_the_banner_is_wide_and_the_cover_is_githubs_size():
     assert _png_size(ART / "cover.png") == (1280, 640), "GitHub's social preview is 1280 x 640"
 
 
-def test_the_readme_opens_with_the_icon_and_the_banner():
+def test_the_readme_opens_with_the_banner():
+    """The banner is the first thing in the README, above the name. The icon is the player's
+    favicon; the README does not repeat it."""
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     opening = readme.split("\n## ", 1)[0]
-    for picture in ("art/icon.svg", "art/banner.png"):
-        tag = re.search(rf'<img src="{re.escape(picture)}"[^>]*>', opening)
-        assert tag, f"the README does not show {picture} before its first section"
-        alt = re.search(r'alt="([^"]+)"', tag.group(0))
-        assert alt and len(alt.group(1).split()) >= 3, f"{picture} has no alt text a reader can use"
+    tag = re.search(r'<img src="art/banner\.png"[^>]*>', opening)
+    assert tag, "the README does not show art/banner.png before its first section"
+    assert opening.lstrip().startswith(tag.group(0)), "the banner is not the first thing in the README"
+    alt = re.search(r'alt="([^"]+)"', tag.group(0))
+    assert alt and len(alt.group(1).split()) >= 3, "art/banner.png has no alt text a reader can use"
 
 
 def test_the_player_carries_the_icon_as_its_favicon():

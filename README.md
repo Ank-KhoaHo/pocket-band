@@ -1,27 +1,21 @@
-<p align="center"><img src="art/icon.svg" width="112" height="112" alt="pocket-band icon: a cassette tape"></p>
+<img src="art/banner.png" alt="The pocket-band player, a tape deck, playing the Synthwave cassette in the Lively mood">
 
-<h1 align="center">pocket-band</h1>
+# pocket-band
 
-<p align="center"><b>All sound made in code.</b> A tape-deck music player with no audio files.</p>
-
-<p align="center">
 <a href="https://github.com/Ank-KhoaHo/pocket-band/actions/workflows/ci.yml"><img src="https://github.com/Ank-KhoaHo/pocket-band/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
 <a href="https://github.com/Ank-KhoaHo/pocket-band/releases/latest"><img src="https://img.shields.io/github/v/release/Ank-KhoaHo/pocket-band" alt="Latest release"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/licence-CC%20BY%204.0-blue" alt="Licence: CC BY 4.0"></a>
-</p>
 
-<p align="center"><img src="art/banner.png" alt="The pocket-band player, a tape deck, playing the Synthwave cassette in the Lively mood"></p>
+*All sound made in code. A tape-deck music player with no audio files.*
 
-A music player whose every tune is composed in code, in the browser, with the Web Audio API.
-
-## What this is
+## What it is
 
 A music player that looks like a tape deck. Every note is composed and synthesised in the
 browser by the Web Audio API: no audio files, no samples, nothing to install. Plucked strings,
 pianos, mallets, winds, synths and drums are all made in code, then mixed with a generated
 reverb. Use it as background music, or to pick loops for a game.
 
-## Play it
+## Get started
 
 **Play it online:** <https://ank-khoaho.github.io/pocket-band/> — or download
 `pocket-band.html` from the [latest release](https://github.com/Ank-KhoaHo/pocket-band/releases/latest)
@@ -29,6 +23,8 @@ and open it: it is the whole player in one file.
 
 To run it from a clone, open [`src/index.html`](src/index.html) in a browser, pick a cassette and a mood, and press
 **Play**. The only thing it fetches is its fonts.
+
+## How to use it
 
 - **10 cassettes (styles):** folk, lo-fi, orchestra, chiptune, ambient, jazz café, synthwave,
   tavern, bossa and zen.
@@ -57,25 +53,11 @@ To run it from a clone, open [`src/index.html`](src/index.html) in a browser, pi
 Each loop takes a few seconds to build the first time it plays. Every loop is matched to the
 same loudness (−24 LUFS), so switching never jumps in volume.
 
-## Where things live
-
-| File | What it holds |
-|---|---|
-| [PUBLIC.md](PUBLIC.md) | why some material is deliberately not published here |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | how to build and test it, and what gets rejected |
-| [SECURITY.md](SECURITY.md) | how to report a vulnerability, and what is not one |
-| [ROADMAP.md](ROADMAP.md) | direction, and the things deliberately not coming |
-| [LICENSE](LICENSE) | what you may do with this |
-
 ## Status
 
 Version 1.0.0 is released, and the online player is built from `main` on every push. Every
 test renders all 180 loops in headless Chromium and checks that none is silent, broken or too
 loud. It is tested in Chromium-based browsers only.
-
-The music and the code are licensed under
-[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/): use, change and share them, even
-commercially, as long as you credit **"pocket-band" by Khoa Ho**. See [LICENSE](LICENSE).
 
 ## Limits
 
@@ -105,3 +87,19 @@ your system's own.
 
 **Why are there no audio files?** Every sound is made by code as it plays. The whole player is
 one file of about 133 KB.
+
+## Documentation
+
+| File | What it holds |
+|---|---|
+| [PUBLIC.md](PUBLIC.md) | why some material is deliberately not published here |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | how to build and test it, and what gets rejected |
+| [SECURITY.md](SECURITY.md) | how to report a vulnerability, and what is not one |
+| [ROADMAP.md](ROADMAP.md) | direction, and the things deliberately not coming |
+| [LICENSE](LICENSE) | what you may do with this |
+
+## Licence
+
+The music and the code are licensed under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/): use, change and share them, even
+commercially, as long as you credit **"pocket-band" by Khoa Ho**. See [LICENSE](LICENSE).
