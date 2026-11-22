@@ -39,9 +39,11 @@ spaces.
 
 ## Reporting
 
-Report unacceptable behaviour through a [private report](https://github.com/Ank-KhoaHo/pocket-band/security/advisories/new) on the repository.
-**There is deliberately no contact email**, for the same reason [SECURITY.md](SECURITY.md) gives. All reports will be reviewed and
-investigated promptly and fairly, and the identity of the reporter will be kept confidential.
+Report unacceptable behaviour through a
+[private report](https://github.com/Ank-KhoaHo/pocket-band/security/advisories/new) on
+the repository. There is no contact email address, on purpose, for the reason
+[SECURITY.md](SECURITY.md) gives. All reports will be reviewed and investigated promptly and
+fairly, and the identity of the reporter will be kept confidential.
 
 ## Enforcement
 
