@@ -90,6 +90,10 @@ class StepResult:
 # and over 60 on a desktop whose processors are busy with other work. The limit is the CI job's
 # own. A selection that finds no test makes pytest exit 5, so neither step can pass having run
 # nothing.
+#
+# A step's limit is the project's own number. In the template, the `tests` step has 900 s,
+# because the template's own suite makes whole projects in scratch folders. A project's suite
+# is its own, and a project keeps its own number when it takes this file from the template.
 STEPS: list[Step] = [
     Step(
         name="tests",
