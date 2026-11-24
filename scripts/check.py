@@ -91,9 +91,9 @@ class StepResult:
 # own. A selection that finds no test makes pytest exit 5, so neither step can pass having run
 # nothing.
 #
-# A step's limit is the project's own number. In the template, the `tests` step has 900 s,
-# because the template's own suite makes whole projects in scratch folders. A project's suite
-# is its own, and a project keeps its own number when it takes this file from the template.
+# A step's limit is the project's own number. In the template, the `tests` step has a longer
+# limit, because the template's own suite makes whole projects in scratch folders. A project's
+# suite is its own, and a project keeps its own number when it takes this file from the template.
 STEPS: list[Step] = [
     Step(
         name="tests",
